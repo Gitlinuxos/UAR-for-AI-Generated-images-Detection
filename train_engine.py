@@ -51,11 +51,15 @@ class Trainer(nn.Module):
         """
         if isinstance(data, (list, tuple)):
             # If the data[0] is a list, then iterate and  move each element to the device
-            self.input = [item.to(self.device) if isinstance(item, torch.Tensor) else item for item in data]
+            self.input = [item.to(self.device) if isinstance(item, torch.Tensor) else item for item in data[0]]
+            self.label = [item.to(self.device) if isinstance(item, torch.Tensor) else item for item in data[1]]
         else:
             # If data is not iterable, directly move it to the device
             self.input = data[0].to(self.device)
-        self.label = data[1].to(self.device)
+            self.label = data[1].to(self.device)
+        
+        self.input = torch.stack(self.input) if isinstance(self.input[0], torch.Tensor) else self.input
+        self.label = torch.stack(self.label) if isinstance(self.label[0], torch.Tensor) else self.label
 
     def forward(self):
         """
@@ -79,8 +83,10 @@ class Trainer(nn.Module):
         """
         Compute the loss function.
         """
-
-        self.loss = self.loss_fn(self.output.squeeze(), self.label)
+        if (len(self.output)) == 1:
+            self.loss = self.loss_fn(self.output[0][0], self.label)
+        else:
+            self.loss = self.loss_fn(self.output.squeeze(), self.label)
 
     def optimize_parameters(self):
         """

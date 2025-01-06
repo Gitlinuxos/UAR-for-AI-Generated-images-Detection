@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from sklearn.metrics import accuracy_score, average_precision_score
+import math
 
 
 class Validator(nn.Module):
@@ -70,15 +71,25 @@ class Validator(nn.Module):
             in_tensors = img.cuda()
 
             preds = self.model(in_tensors).sigmoid().flatten().tolist()
+            
             y_pred.extend(preds)
             y_true.extend(label.flatten().tolist())
 
         y_true = np.array(y_true)
         y_pred = np.array(y_pred)
 
-        r_acc = accuracy_score(y_true[y_true == 0], y_pred[y_true == 0] > 0.5)
-        f_acc = accuracy_score(y_true[y_true == 1], y_pred[y_true == 1] > 0.5)
+
+        if len(y_pred[y_true == 0]) == 0 or len(y_true[y_true == 0]) == 0:
+            r_acc = 0.00
+        else:
+            r_acc = accuracy_score(y_true[y_true == 0], y_pred[y_true == 0] > 0.5)
+
+        if len(y_pred[y_true == 1]) == 0 or len(y_true[y_true == 1]) == 0:
+            f_acc = 0.00
+        else:
+            f_acc = accuracy_score(y_true[y_true == 1], y_pred[y_true == 1] > 0.5)
         acc = accuracy_score(y_true, y_pred > 0.5)
-        ap = average_precision_score(y_true, y_pred)
+        ap = average_precision_score(y_true, y_pred, pos_label=0)
+        ap = math.fabs(ap)
 
         return acc, ap, r_acc, f_acc, y_true, y_pred

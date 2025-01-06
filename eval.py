@@ -79,3 +79,5 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     main(args)
+
+# python eval.py --dataroot /home/data2/jingmh/imagenet/ILSVRC2012_img_test_v10102019/aim_new_v1/stable_1p4_npy_aimv1_subset5000/ --checkpoint /home/data2/chiyj24/aim/checkpoints/AIMClassifier2/epoch_0_model.pth --validation_sets ''

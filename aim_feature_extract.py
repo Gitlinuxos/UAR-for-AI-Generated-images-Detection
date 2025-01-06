@@ -107,7 +107,6 @@ if __name__ == '__main__':
     main(args)
 
 
-
 """
 python /home/data2/jmh/aim_feature_extract.py \
         --input_path /home/data2/jmh/demo/demo_images/1_fake \

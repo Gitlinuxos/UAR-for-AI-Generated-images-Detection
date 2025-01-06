@@ -77,6 +77,9 @@ if __name__ == "__main__":
     parser.add_argument('--dataroot', type=str, required=True, help="The dir path of input images")
     parser.add_argument('--batch_size', type=int, default=32, help="The batch size during training")
     parser.add_argument('--transform', type=str, default=None, help="Transformation method registered in TransformRegistry")
-    
+
+
     args = parser.parse_args()
     main(args)
+
+# python train.py --dataroot /home/data2/jingmh/imagenet/ILSVRC2012_img_test_v10102019/aim_new_v1/stable_1p4_npy_aimv1_subset100/
